@@ -20,6 +20,8 @@ def getinfo(s,directory,head):
 	biosample = response.json()
 	if 'track_title' in biosample['track_and_facet_info'].keys():
 		track_name=biosample['track_and_facet_info']['track_title']
+	elif 'dataset' in biosample['track_and_facet_info'].keys():
+		track_name=biosample['track_and_facet_info']['dataset']
 	else:
 		#print("No track name for " + s[3] + "!")
 		#track_name=s[3]
@@ -31,6 +33,7 @@ def getinfo(s,directory,head):
 		else:
 			print("No track name for " + s[3] + "!")
 			track_name = s[3]
+	#track_name = s[3] + "_" + s[11]
     
     #genome version
 	if s[13]=="human":
@@ -58,7 +61,7 @@ def getinfo(s,directory,head):
 	short_name = s[3]
 	long_name = track_name
     
-	line = [s[3],s[8],s[7],s[8],genome,s[11],directory+s[3]+extension,short_name,long_name,'https://data.4dnucleome.org/'+s[3],info]
+	line = [s[3],s[6],s[7],s[6],genome,s[12],directory+s[3]+extension,short_name,long_name,'https://data.4dnucleome.org/'+s[3],info]
 	return line
 
 def writeTSV(output,table):
@@ -90,10 +93,10 @@ if __name__ == '__main__':
 
 	table_list = {}
 	for i in range(len(table)):
-		if (table[i][1],table[i][4]) in table_list.keys():
-			table_list[(table[i][1],table[i][4])].append(table[i])
+		if (table[i][2],table[i][4]) in table_list.keys():
+			table_list[(table[i][2],table[i][4])].append(table[i])
 		else:
-			table_list[(table[i][1],table[i][4])]=[table[i]]
+			table_list[(table[i][2],table[i][4])]=[table[i]]
 
 	for (data,genome) in table_list.keys():
 		writeTSV(args.o + "." + data + "." + genome + ".tsv",table_list[(data,genome)])
